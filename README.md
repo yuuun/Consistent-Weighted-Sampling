@@ -5,7 +5,7 @@
 
 ## Datasets 
  - Datasets can be downloaded in https://www.csie.ntu.edu.tw/~cjlin/libsvm/
- - Since HCWS focus on dense datasets, we use 8 datasets from the following
+ - Since HCWS focus on dense datasets, we use 8 datasets as the following
  
  |Dataset|Dimesnion|Density|# of classes|Size of Train Sets|
  |---|---|---|---|---|
