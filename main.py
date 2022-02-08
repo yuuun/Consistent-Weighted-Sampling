@@ -27,30 +27,12 @@ if __name__=='__main__':
     ### We figured out that the dimension does not exactly match between the total dataset and train dataset.
     ### So we got dimensions from each datasets depcited in LIBSVM
     dim_list = [36, 48, 256, 294, 3072, 3072, 5000, 18432, 780]
-    # icws = ICWS(data.train_weights, data.train_idxs, 
-    #             data.test_weights, data.test_idxs, 
-    #             js.sorted_closest_idxs, dim_list[data_id], 50)
+    icws = ICWS(data.train_weights, data.train_idxs, 
+                data.test_weights, data.test_idxs, 
+                js.sorted_closest_idxs, dim_list[data_id], 100)
 
-    # with open('./dataset/{0}.icws'.format(data_list[data_id]), 'wb') as f:
-    #     pickle.dump(icws, f)
+    with open('./dataset/{0}.icws'.format(data_list[data_id]), 'wb') as f:
+        pickle.dump(icws, f)
     
-    with open('./dataset/{0}.icws'.format(data_list[data_id]), 'rb') as f:
-        icws = pickle.load(f)
-    cnt = 0
-    for sigs in icws.train_samples:
-        if sigs[0][0] == icws.test_samples[0][0][0] and sigs[0][1] == icws.test_samples[0][0][1]:
-            cnt += 1
-    
-    simiarity = []
-    for ts in icws.test_samples:
-        sim = []
-        for trs in icws.train_samples:
-            cnt = 0
-            for t, tr in zip(ts, trs):
-                if t[0] == tr[0] and t[1] == tr[1]:
-                    cnt += 1
-            sim.append(cnt / 50)
-        simiarity.append(sim)
-                    
-
-    import pdb; pdb.set_trace()
+    # with open('./dataset/{0}.icws'.format(data_list[data_id]), 'rb') as f:
+    #     icws = pickle.load(f)

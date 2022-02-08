@@ -42,7 +42,7 @@ class GeneralizedJaccardSimliarity():
                     
                 similarity.append(sum_min / sum_max)
 
-            sorted_similarity_idx = sorted(range(len(similarity)), key=lambda k: similarity[k])
+            sorted_similarity_idx = sorted(range(len(similarity)), key=lambda k: similarity[k], reverse=True)
             self.sorted_closest_idxs.append(sorted_similarity_idx)
             self.total_time = '{:.5f}s'.format(time.time() - start)
 
@@ -97,16 +97,17 @@ class ICWS():
         return minIdx, minY
     
     def get_similarity(self):
-        self.similarity = []
-        self.sorted_closest_idxs = []
+        self.similarity = []            # total similarity
+        self.sorted_closest_idxs = []   # total index sorted with 
         for ts in self.test_samples:
-            sim = []
+            one_sim = []                # simlarity between one test dataset and rest train dataset
             for trs in self.train_samples:
                 cnt = 0
                 for t, tr in zip(ts, trs):
                     if t[0] == tr[0] and t[1] == tr[1]:
                         cnt += 1
-                sim.append(cnt / self.n_sig)
-            self.similarity.append(sim)
-            sorted_similarity_idx = sorted(range(len(self.similarity)), key=lambda k: self.similarity[k])
+                one_sim.append(cnt / self.n_sig)
+
+            self.similarity.append(one_sim)
+            sorted_similarity_idx = sorted(range(len(one_sim)), key=lambda k: one_sim[k], reverse=True)
             self.sorted_closest_idxs.append(sorted_similarity_idx)
