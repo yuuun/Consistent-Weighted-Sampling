@@ -124,3 +124,4 @@ class Data():
         for i, tw in enumerate(self.test_weights):
             for j in range(len(tw)):
                 self.test_weights[i][j] = (self.test_weights[i][j] - min_val) * (1 - alpha) / (max_val - min_val + 1e-9) + alpha
+

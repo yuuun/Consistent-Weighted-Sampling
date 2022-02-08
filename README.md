@@ -15,7 +15,7 @@ This is the code of ICWS and its variants and HCWS which is depicted in python
  |usps|256|100%|3|5000|
  |scene|294|100%|6|1021|
  |cifar10|3072|100%|10|5000|
- |SVHN|2072|100%|10|5000|
+ |SVHN|3072|100%|10|5000|
  |gisette|5000|100%|2|5000|
  |smallNORB|18432|100%|5|5000|
  
