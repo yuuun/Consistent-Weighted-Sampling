@@ -7,11 +7,17 @@ from utils import *
 
 
 class GeneralizedJaccardSimliarity():
-    def __init__(self, train_weights, train_idxs, test_weights, test_idxs):
+    def __init__(self, train_weights, train_idxs, train_labels, test_weights, test_idxs, test_labels):
         self.train_weights = train_weights
         self.train_idxs = train_idxs
+        self.train_labels = train_labels
+
         self.test_weights = test_weights
         self.test_idxs = test_idxs
+        self.test_labels = test_labels
+        
+        self.calculate_jacc()
+        self.get_acc()
     
     def calculate_jacc(self):
         start = time.time()
@@ -46,12 +52,19 @@ class GeneralizedJaccardSimliarity():
             self.sorted_closest_idxs.append(sorted_similarity_idx)
             self.total_time = '{:.5f}s'.format(time.time() - start)
 
+    def get_acc(self):
+        return calculate_acc(self.train_labels, self.test_labels, self.sorted_closest_idxs)
+
+
 class ICWS():
-    def __init__(self, train_weights, train_idxs, test_weights, test_idxs, jacc, dim, n_sig):
+    def __init__(self, train_weights, train_idxs, train_labels, test_weights, test_idxs, test_labels, jacc, dim, n_sig, kList):
         self.train_weights = train_weights
         self.train_idxs = train_idxs
+        self.train_labels = train_labels
+
         self.test_weights = test_weights
         self.test_idxs = test_idxs
+        self.test_labels = test_labels
         
         self.n_train = len(self.train_idxs)
         self.n_test = len(self.test_idxs)
@@ -60,9 +73,12 @@ class ICWS():
         
         self.dim = dim
         self.n_sig = n_sig  # number of samples(signature) to hash
+        self.kList = kList
+
         self.rng = RandomNumberGenerator(self.dim, self.n_sig)
         self.get_samples()
-        self.get_similarity()
+        self.similarity, self.sorted_closest_idxs = get_similarity(self.train_samples, self.test_samples, n_sig)
+        self.get_performance()
     
     def get_samples(self):
         start = time.time()
@@ -96,18 +112,6 @@ class ICWS():
 
         return minIdx, minY
     
-    def get_similarity(self):
-        self.similarity = []            # total similarity
-        self.sorted_closest_idxs = []   # total index sorted with 
-        for ts in self.test_samples:
-            one_sim = []                # simlarity between one test dataset and rest train dataset
-            for trs in self.train_samples:
-                cnt = 0
-                for t, tr in zip(ts, trs):
-                    if t[0] == tr[0] and t[1] == tr[1]:
-                        cnt += 1
-                one_sim.append(cnt / self.n_sig)
-
-            self.similarity.append(one_sim)
-            sorted_similarity_idx = sorted(range(len(one_sim)), key=lambda k: one_sim[k], reverse=True)
-            self.sorted_closest_idxs.append(sorted_similarity_idx)
+    def get_performance(self):
+        self.acc = calculate_acc(self.train_labels, self.test_labels, self.sorted_closest_idxs)
+        self.prec_list = calculate_prec(self.jacc, self.sorted_closest_idxs, self.kList)
