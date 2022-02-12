@@ -1,36 +1,22 @@
-# HCWS
-This is the code of ICWS and its variants and HCWS which is depicted in python
+# Improved Consistent Weighted Sampling
+This is the code of ICWS and its variants.
 
 ### Related Papers
+ - ICWS: [Improved consistent sampling, weighted minhash and l1 sketching](https://ieeexplore.ieee.org/abstract/document/5693978/?casa_token=cD19RSA8IxUAAAAA:0FWHkkknyJ1pK9Sy9n_saBIeLfS5aajGDw5NBJmPNcfvPShqat8AR5id8Kobp86ZsikbpOoXYrs)
+ - 0-bit CWS: [0-bit consistent weighted sampling](https://dl.acm.org/doi/abs/10.1145/2783258.2783406?casa_token=uP0Mu8Z8EDMAAAAA:RYXF3QRGxTbQ7wlEwoNZieO6J5XC2oLHV2cZqDSCX-LUuQpJwDZdy1TSjT_ZzJWTTN7kwjHRyBe94rQ)
+ - CCWS: [Canonical consistent weighted sampling for real-value weighted min-hash](https://ieeexplore.ieee.org/abstract/document/7837987/?casa_token=3TNUkPLz8nYAAAAA:Foee7yZzzhKqUJ67zUehtz-t8GaHoODorolxfAxYWK0aa0KeL7HcB5IVF7wsnC_9oWUrCwdmZck)
+ - PCWS: [Consistent weighted sampling mad more practical](https://dl.acm.org/doi/abs/10.1145/3038912.3052598?casa_token=ZucI6adplDYAAAAA:N4rV4dcWQtyhPWS1zZFi4J7IlEdNEQLWN2axJf9sWfW35ylDkTcYI0f1uEHx2tkjfqJJ8AIHgCAU1x0)
+ - I2CWS: [Improved consistent weighted sampling revisited](https://ieeexplore.ieee.org/abstract/document/8493289/?casa_token=gBsxfXBHNosAAAAA:lLmHk1eYCd0jkBF6-F4A6DsbvZOUAvreLjrTU5BG2ofutdw8cYWHAdMeCmil4kA68ud7TyW-VW4)
+ - SCWS: [Canonical consistent weighted sampling for real-value weighted min-hash](https://ieeexplore.ieee.org/abstract/document/7837987/?casa_token=yXYVurruAnMAAAAA:5Fq0Gj3ogIBcGll3dLh1xN4c7MuNueS5S9gARGnqNJwYfuUvZHFpBHRi1hK9dxrlxnCVEiJBy6Q)
+ - BCWS: [Re-randomized densification for one permutation hashing and bin-wise consistent weighted sampling](https://proceedings.neurips.cc/paper/2019/hash/9f067d8d6df2d4b8c64fb4c084d6c208-Abstract.html)
 
 
 ## Datasets 
  - Datasets can be downloaded in https://www.csie.ntu.edu.tw/~cjlin/libsvm/
- - Since HCWS focus on dense datasets, we use 8 datasets as the following
  
- |Dataset|Dimesnion|Density|# of classes|Size of Train Sets|
- |---|---|---|---|---|
- |satimage|36|99.1%|6|3104|
- |sensorless|48|100%|11|5000|
- |usps|256|100%|3|5000|
- |scene|294|100%|6|1021|
- |cifar10|3072|100%|10|5000|
- |SVHN|3072|100%|10|5000|
- |gisette|5000|100%|2|5000|
- |smallNORB|18432|100%|5|5000|
- 
-## Model
- - ICWS
- - CCWS
- - PCWS
- - I2CWS
- - SCWS
- - BCWS
 
 ## Experiments
 ### Evaluation
  - Hashing Time
  - Classification Accuracy
  - Precision(the criteria of Jaccard Similarity)
-
-### Results

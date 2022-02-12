@@ -57,3 +57,13 @@ if __name__=='__main__':
     
     with open('./dataset/{0}.pcws'.format(data_list[data_id]), 'rb') as f:
         pcws = pickle.load(f)
+    
+    i2cws = I2CWS(data.train_weights, data.train_idxs, data.train_labels,
+                            data.test_weights, data.test_idxs, data.test_labels,
+                            js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
+    
+    with open('./dataset/{0}.i2cws'.format(data_list[data_id]), 'wb') as f:
+        pickle.dump(i2cws, f)
+    
+    with open('./dataset/{0}.i2cws'.format(data_list[data_id]), 'rb') as f:
+        i2cws = pickle.load(f)
