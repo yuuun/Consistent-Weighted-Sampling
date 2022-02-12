@@ -43,7 +43,17 @@ if __name__=='__main__':
                             js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
     
     with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'wb') as f:
-        pickle.dump(icws, f)
+        pickle.dump(zero_icws, f)
     
     with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'rb') as f:
-        icws = pickle.load(f)
+        zero_icws = pickle.load(f)
+
+    pcws = PCWS(data.train_weights, data.train_idxs, data.train_labels,
+                            data.test_weights, data.test_idxs, data.test_labels,
+                            js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
+    
+    with open('./dataset/{0}.pcws'.format(data_list[data_id]), 'wb') as f:
+        pickle.dump(pcws, f)
+    
+    with open('./dataset/{0}.pcws'.format(data_list[data_id]), 'rb') as f:
+        pcws = pickle.load(f)
