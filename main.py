@@ -26,7 +26,7 @@ if __name__=='__main__':
     ### We figured out that the dimension does not exactly match between the total dataset and train dataset.
     ### So we got dimensions from each datasets depcited in LIBSVM
     dim_list = [36, 48, 256, 294, 3072, 3072, 5000, 18432, 780]
-    n_sig = 200
+    n_sig = 50
     kList = [1, 10, 50, 100, 500]
 
     # icws = ICWS(data.train_weights, data.train_idxs, data.train_labels,
@@ -35,18 +35,30 @@ if __name__=='__main__':
     # with open('./dataset/{0}.icws'.format(data_list[data_id]), 'wb') as f:
     #     pickle.dump(icws, f)
     
-    with open('./dataset/{0}.icws'.format(data_list[data_id]), 'rb') as f:
-        icws = pickle.load(f)
+    # with open('./dataset/{0}.icws'.format(data_list[data_id]), 'rb') as f:
+    #     icws = pickle.load(f)
     
-    zero_icws = zero_ICWS(data.train_weights, data.train_idxs, data.train_labels,
+    # zero_icws = zero_ICWS(data.train_weights, data.train_idxs, data.train_labels,
+    #                         data.test_weights, data.test_idxs, data.test_labels,
+    #                         js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
+    
+    # with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'wb') as f:
+    #     pickle.dump(zero_icws, f)
+    
+    # with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'rb') as f:
+    #     zero_icws = pickle.load(f)
+    
+    ccws = CCWS(data.train_weights, data.train_idxs, data.train_labels,
                             data.test_weights, data.test_idxs, data.test_labels,
                             js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
     
-    with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'wb') as f:
-        pickle.dump(zero_icws, f)
+    with open('./dataset/{0}.ccws'.format(data_list[data_id]), 'wb') as f:
+        pickle.dump(ccws, f)
     
-    with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'rb') as f:
-        zero_icws = pickle.load(f)
+    with open('./dataset/{0}.ccws'.format(data_list[data_id]), 'rb') as f:
+        ccws = pickle.load(f)
+    import pdb; pdb.set_trace()
+    
 
     pcws = PCWS(data.train_weights, data.train_idxs, data.train_labels,
                             data.test_weights, data.test_idxs, data.test_labels,
