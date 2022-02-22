@@ -47,7 +47,7 @@ def load_data(data_id, data_path):
 def load_js(data, data_path, Model):
     if os.path.isfile(data_path):
         with open(data_path, 'rb') as f:
-            return pickle.load(f)
+            js = pickle.load(f)
     else:
         js = Model(data.train_weights, data.train_idxs, data.train_labels, data.test_weights, data.test_idxs, data.test_labels)
         with open(data_path, 'wb') as f:
