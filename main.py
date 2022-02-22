@@ -1,81 +1,25 @@
-from data_loader import Data
 from models import *
-import pickle
 from utils import *
 
 if __name__=='__main__':
     data_list = ['satimage.scale', 'Sensorless', 'usps', 'scene_', 'cifar10', 'SVHN', 'gisette_scale', 'smallNORB', 'mnist']
+    dim_list = [36, 48, 256, 294, 3072, 3072, 5000, 18432, 780]
     data_id = -1
+    dim = dim_list[data_id]
 
-    ### Since calculating Jaccard Similarity taked much time, we save the results of datasets and Jaccard Simliarity
-    
-    # data = Data(data_id)
-    # with open('./dataset/{0}.pkl'.format(data_list[data_id]), 'wb') as f:
-    #     pickle.dump(data, f)
-
-    with open('./dataset/{0}.pkl'.format(data_list[data_id]), 'rb') as f:
-        data = pickle.load(f)
-
-    # js = GeneralizedJaccardSimliarity(data.train_weights, data.train_idxs, data.train_labels, data.test_weights, data.test_idxs, data.test_labels)
-    # with open('./dataset/{0}.js'.format(data_list[data_id]), 'wb') as f:
-    #     pickle.dump(js, f)
-
-    with open('./dataset/{0}.js'.format(data_list[data_id]), 'rb') as f:
-        js = pickle.load(f)
+    data_path = './dataset/{0}'.format(data_list[data_id])
+    data = load_data(data_id, data_path + '.pkl')
+   
+    js = load_js(data, data_path + '.js', GeneralizedJaccardSimliarity)
     
     ### We figured out that the dimension does not exactly match between the total dataset and train dataset.
     ### So we got dimensions from each datasets depcited in LIBSVM
-    dim_list = [36, 48, 256, 294, 3072, 3072, 5000, 18432, 780]
-    n_sig = 50
+    
+    n_sig = 500
     kList = [1, 10, 50, 100, 500]
 
-    # icws = ICWS(data.train_weights, data.train_idxs, data.train_labels,
-    #             data.test_weights, data.test_idxs, data.test_labels,
-    #             js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
-    # with open('./dataset/{0}.icws'.format(data_list[data_id]), 'wb') as f:
-    #     pickle.dump(icws, f)
-    
-    # with open('./dataset/{0}.icws'.format(data_list[data_id]), 'rb') as f:
-    #     icws = pickle.load(f)
-    
-    # zero_icws = zero_ICWS(data.train_weights, data.train_idxs, data.train_labels,
-    #                         data.test_weights, data.test_idxs, data.test_labels,
-    #                         js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
-    
-    # with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'wb') as f:
-    #     pickle.dump(zero_icws, f)
-    
-    # with open('./dataset/{0}.zero_icws'.format(data_list[data_id]), 'rb') as f:
-    #     zero_icws = pickle.load(f)
-    
-    ccws = CCWS(data.train_weights, data.train_idxs, data.train_labels,
-                            data.test_weights, data.test_idxs, data.test_labels,
-                            js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
-    
-    with open('./dataset/{0}.ccws'.format(data_list[data_id]), 'wb') as f:
-        pickle.dump(ccws, f)
-    
-    with open('./dataset/{0}.ccws'.format(data_list[data_id]), 'rb') as f:
-        ccws = pickle.load(f)
-    import pdb; pdb.set_trace()
-    
-
-    pcws = PCWS(data.train_weights, data.train_idxs, data.train_labels,
-                            data.test_weights, data.test_idxs, data.test_labels,
-                            js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
-    
-    with open('./dataset/{0}.pcws'.format(data_list[data_id]), 'wb') as f:
-        pickle.dump(pcws, f)
-    
-    with open('./dataset/{0}.pcws'.format(data_list[data_id]), 'rb') as f:
-        pcws = pickle.load(f)
-    
-    i2cws = I2CWS(data.train_weights, data.train_idxs, data.train_labels,
-                            data.test_weights, data.test_idxs, data.test_labels,
-                            js.sorted_closest_idxs, dim_list[data_id], n_sig, kList)
-    
-    with open('./dataset/{0}.i2cws'.format(data_list[data_id]), 'wb') as f:
-        pickle.dump(i2cws, f)
-    
-    with open('./dataset/{0}.i2cws'.format(data_list[data_id]), 'rb') as f:
-        i2cws = pickle.load(f)
+    icws = load_model(data, data_path + '.icws', ICWS, dim, n_sig, kList, js)
+    zero_icws = load_model(data, data_path + '.zero_icws', zero_ICWS, dim, n_sig, kList, js)
+    ccws = load_model(data, data_path + '.ccws', CCWS, dim, n_sig, kList, js)
+    pcws = load_model(data, data_path + '.pcws', PCWS, dim, n_sig, kList, js)
+    i2cws = load_model(data, data_path + '.i2cws', I2CWS, dim, n_sig, kList, js)

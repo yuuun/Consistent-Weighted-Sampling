@@ -1,5 +1,7 @@
 # Improved Consistent Weighted Sampling
-This is the code of ICWS and its variants.
+As datasets become larger and more high-dimensional, it becomes increasingly important to find data representations that allow compact storage and efficient distance computation and retrieval. Improved Consistent Weighted Sampling(ICWS, IEEE, 20110) is the state-of-the-art of the sampling methods in weighted sets. There are some variants of ICWS which decreases the time of sampling or increase the quality of samples. 
+
+In this repository, I implemented ICWS and its variants.
 
 ## Build Instruction
 ```
@@ -19,9 +21,9 @@ $ python3 main.py
 
 ### Input File Data Formats
 ```
-[label1] [idx1_1]:[val1_1] [idx1_2]:[val1_2] ...
-[label2] [idx2_1]:[val2_1] [idx2_2]:[val2_2] ...
-[label3] [idx3_1]:[val3_1] [idx3_2]:[val3_2] ...
+[label1] [idx1_1]:[weight1_1] [idx1_2]:[weight1_2] ...
+[label2] [idx2_1]:[weight2_1] [idx2_2]:[weight2_2] ...
+[label3] [idx3_1]:[weight3_1] [idx3_2]:[weight3_2] ...
 ```
  
 #### Example
@@ -32,12 +34,20 @@ $ python3 main.py
 
 ## Models
 - ICWS
+    - state of the CWS method that improves the effectiveness and efficiency
 - 0-bit CWS
+    - improves the space efficiency and GJS estimation time
 - CCWS
+    - improves the time efficiency of ICWS by removing the cacluation of logarithm
 - PCWS
+    - replace one of the two gamma distributions with uniform distribution which improves both time and space complexities in ICWS
 - I2CWS
+    - hashes $y_k$ and $z_k$ separately which makes $k^*$ and $y_{k^*}$ dependent
 - SCWS
+    - simplifies into a floating-point multiplication using a pool of presented values
+    - increases the time efficiency because of the pre-sampled pool
 - BCWS
+    - applies OPH on CWS and increased the time efficiency dramatically
 
 ## Experiments
 ### Evaluation
