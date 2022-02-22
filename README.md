@@ -6,6 +6,11 @@ This is the code of ICWS and its variants.
 $ git clone git@github.com:yuuun/Consistent-Weighted-Sampling.git
 $ cd Consistent-Weighted-Sampling
 $ pip3 install -r requirements.txt
+$ mkdir dataset
+```
+
+After Downloading datasets to dataset/ file, you can run the file by the following command
+```
 $ python3 main.py
 ```
 
@@ -24,6 +29,15 @@ $ python3 main.py
 1 1:5 3:7 10:9
 2 2:6 3:1 8:10 
 ```
+
+## Models
+- ICWS
+- 0-bit CWS
+- CCWS
+- PCWS
+- I2CWS
+- SCWS
+- BCWS
 
 ## Experiments
 ### Evaluation
