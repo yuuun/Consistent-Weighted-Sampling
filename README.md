@@ -2,28 +2,28 @@
 This is the code of ICWS and its variants.
 
 ## Build Instruction
-'''
+```
 $ git clone git@github.com:yuuun/Consistent-Weighted-Sampling.git
 $ cd Consistent-Weighted-Sampling
 $ pip3 install -r requirements.txt
 $ python3 main.py
-'''
+```
 
 ## Datasets 
  - Datasets can be downloaded in https://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 ### Input File Data Formats
-'''
+```
 [label1] [idx1_1]:[val1_1] [idx1_2]:[val1_2] ...
 [label2] [idx2_1]:[val2_1] [idx2_2]:[val2_2] ...
 [label3] [idx3_1]:[val3_1] [idx3_2]:[val3_2] ...
-'''
+```
  
 #### Example
-'''
+```
 1 1:5 3:7 10:9
 2 2:6 3:1 8:10 
-'''
+```
 
 ## Experiments
 ### Evaluation
