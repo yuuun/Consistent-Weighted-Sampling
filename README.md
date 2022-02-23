@@ -1,5 +1,5 @@
 # Improved Consistent Weighted Sampling
-As datasets become larger and more high-dimensional, it becomes increasingly important to find data representations that allow compact storage and efficient distance computation and retrieval. Improved Consistent Weighted Sampling(ICWS, IEEE, 20110) is the state-of-the-art of the sampling methods in weighted sets. There are some variants of ICWS which decreases the time of sampling or increase the quality of samples. 
+As datasets become larger and more high-dimensional, it becomes increasingly important to find data representations that allow compact storage and efficient distance computation and retrieval. Improved Consistent Weighted Sampling(ICWS, IEEE, 2010) is the state-of-the-art of the sampling methods in weighted sets. There are some variants of ICWS which decreases the time of sampling or increase the quality of samples. 
 
 In this repository, I implemented ICWS and its variants.
 
@@ -42,7 +42,7 @@ $ python3 main.py
 - PCWS
     - replace one of the two gamma distributions with uniform distribution which improves both time and space complexities in ICWS
 - I2CWS
-    - hashes $y_k$ and $z_k$ separately which makes $k^{*}$ and $y_{k^*}$ dependent
+    - hashes $y_k$ and $z_k$ separately which makes $k^{\*}$ and $y_{k^\*}$ dependent
 - SCWS
     - simplifies into a floating-point multiplication using a pool of presented values
     - increases the time efficiency because of the pre-sampled pool

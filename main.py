@@ -8,6 +8,8 @@ if __name__=='__main__':
     dim = dim_list[data_id]
 
     data_path = './dataset/{0}'.format(data_list[data_id])
+    
+    # if you don't need to save the result of each model, you can use the parameter of do_save=False
     data = load_data(data_id, data_path + '.pkl')
    
     js = load_js(data, data_path + '.js', GeneralizedJaccardSimliarity)
@@ -23,3 +25,5 @@ if __name__=='__main__':
     ccws = load_model(data, data_path + '.ccws', CCWS, dim, n_sig, kList, js)
     pcws = load_model(data, data_path + '.pcws', PCWS, dim, n_sig, kList, js)
     i2cws = load_model(data, data_path + '.i2cws', I2CWS, dim, n_sig, kList, js)
+    scws = load_model(data, data_path + '.scws', SCWS, dim, n_sig, kList, js) # chck code 
+    import pdb; pdb.set_trace()

@@ -31,32 +31,34 @@ def calculate_prec(sorted_jacc, sorted_idxs, kList):
     return prec_list
 
 
-def load_data(data_id, data_path):
+def load_data(data_id, data_path, do_save=True):
     ### Since calculating Jaccard Similarity taked much time, we save the results of datasets and Jaccard Simliarity
     if os.path.isfile(data_path):
         with open(data_path, 'rb') as f:
             data = pickle.load(f)
     else:
         data = Data(data_id)
-        with open(data_path, 'wb') as f:
-            pickle.dump(data, f)
+        if do_save:
+            with open(data_path, 'wb') as f:
+                pickle.dump(data, f)
 
     print('finishing loading data')
     return data
 
-def load_js(data, data_path, Model):
+def load_js(data, data_path, Model, do_save=True):
     if os.path.isfile(data_path):
         with open(data_path, 'rb') as f:
             js = pickle.load(f)
     else:
         js = Model(data.train_weights, data.train_idxs, data.train_labels, data.test_weights, data.test_idxs, data.test_labels)
-        with open(data_path, 'wb') as f:
-            pickle.dump(js, f)
+        if do_save:
+            with open(data_path, 'wb') as f:
+                pickle.dump(js, f)
 
-    print('finishing loading ' + js)
+    print('finishing loading jaccard similarity')
     return js
 
-def load_model(data, data_path, Model, dim, n_sig, kList, js):
+def load_model(data, data_path, Model, dim, n_sig, kList, js, do_save=True):
     data_path = data_path + '_' + str(n_sig)
     if os.path.isfile(data_path):
         with open(data_path, 'rb') as f:
@@ -65,8 +67,9 @@ def load_model(data, data_path, Model, dim, n_sig, kList, js):
         model = Model(data.train_weights, data.train_idxs, data.train_labels,
                             data.test_weights, data.test_idxs, data.test_labels,
                             js.sorted_closest_idxs, dim, n_sig, kList)
-        with open(data_path, 'wb') as f:
-            return pickle.dump(model, f)
+        if do_save:
+            with open(data_path, 'wb') as f:
+                pickle.dump(model, f)
 
     print('finishing loading ' + data_path)
     return model
