@@ -17,7 +17,7 @@ if __name__=='__main__':
     ### We figured out that the dimension does not exactly match between the total dataset and train dataset.
     ### So we got dimensions from each datasets depcited in LIBSVM
     
-    n_sig = 500
+    n_sig = 100
     kList = [1, 10, 50, 100, 500]
 
     icws = load_model(data, data_path + '.icws', ICWS, dim, n_sig, kList, js)
@@ -25,5 +25,5 @@ if __name__=='__main__':
     ccws = load_model(data, data_path + '.ccws', CCWS, dim, n_sig, kList, js)
     pcws = load_model(data, data_path + '.pcws', PCWS, dim, n_sig, kList, js)
     i2cws = load_model(data, data_path + '.i2cws', I2CWS, dim, n_sig, kList, js)
-    scws = load_model(data, data_path + '.scws', SCWS, dim, n_sig, kList, js) # chck code 
+    bcws = load_model(data, data_path + '.bcws', BCWS, dim, n_sig, kList, js)
     import pdb; pdb.set_trace()

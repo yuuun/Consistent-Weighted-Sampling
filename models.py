@@ -1,5 +1,5 @@
-from random import Random
 import numpy as np
+import random
 import time
 import sys
 import math
@@ -486,9 +486,8 @@ class I2CWS():
         self.prec_list = calculate_prec(self.jacc, self.sorted_closest_idxs, self.kList)
 
 
-
-class SCWS():
-    def __init__(self, train_weights, train_idxs, train_labels, test_weights, test_idxs, test_labels, jacc, dim, n_sig, kList, n_pool=40000,  p1=1073741827, p2=1073741831):
+class BCWS():
+    def __init__(self, train_weights, train_idxs, train_labels, test_weights, test_idxs, test_labels, jacc, dim, n_sig, kList):
         self.train_weights = train_weights
         self.train_idxs = train_idxs
         self.train_labels = train_labels
@@ -506,57 +505,93 @@ class SCWS():
         self.n_sig = n_sig  # number of samples(signature) to hash
         self.kList = kList
 
-        self.p1 = p1
-        self.p2 = p2
-        self.n_pool = n_pool
-
-        self.makePool()
+        self.select_bin()
+        self.generate_random_number()
+        self.splited_train_idxs, self.splited_train_weights = self.splitBins(self.train_idxs, train_weights)
+        self.splited_test_idxs, self.splited_test_weights = self.splitBins(self.test_idxs, self.test_weights)
         self.generate_samples()
         self.get_similarity()
         self.get_performance()
     
-    def makePool(self):
-        ran_r1 = np.random.uniform(0, 1, self.n_pool)
-        ran_r2 = np.random.uniform(0, 1, self.n_pool)
-        ran_c1 = np.random.uniform(0, 1, self.n_pool)
-        ran_c2 = np.random.uniform(0, 1, self.n_pool)
-        
-        self.pool = []
-        for r1, r2, c1, c2 in zip(ran_r1, ran_r2, ran_c1, ran_c2):
-            pool_num = c1 * c2 * math.exp(-r1 * r2)
-            self.pool.append(pool_num)
+    def select_bin(self):
+        self.bins_list = [random.randrange(self.n_sig) for _ in range(self.n_sig)]
+        ## selecting the order of re-randomizing idxs
+        self.rerandomize_list = [random.sample(list(range(self.n_sig)), self.n_sig) for _ in range(self.n_sig)]
     
+    def generate_random_number(self):
+        self.numSigPerBins = self.dim // self.n_sig + 1
+        self.ran_r1 = [np.random.uniform(0, 1, self.numSigPerBins) for _ in range(self.n_sig)]
+        self.ran_r2 = [np.random.uniform(0, 1, self.numSigPerBins) for _ in range(self.n_sig)]
+        self.ran_c1 = [np.random.uniform(0, 1, self.numSigPerBins) for _ in range(self.n_sig)]
+        self.ran_c2 = [np.random.uniform(0, 1, self.numSigPerBins) for _ in range(self.n_sig)]
+        self.ran_b = [np.random.uniform(0, 1, self.numSigPerBins) for _ in range(self.n_sig)]
+    
+    def splitBins(self, idxs_list, weights_list):
+        splited_idxs = [[] for _ in range(len(idxs_list))]
+        splited_weights = [[] for _ in range(len(weights_list))]
+        for i in range(len(idxs_list)):
+            idxs, weights = idxs_list[i], weights_list[i]
+            s, e = 0, 0
+            tmp_idxs = []
+            tmp_weights = []
+            k = 1
+            while k <= self.n_sig:
+                eidx = self.dim * k // self.n_sig
+                while e < len(idxs) and idxs[e] <= eidx:
+                    e += 1
+                tmp_idxs.append(idxs[s:e])
+                tmp_weights.append(weights[s:e])
+                s = e
+                k += 1
+            splited_idxs[i] = tmp_idxs
+            splited_weights[i] = tmp_weights
+        return splited_idxs, splited_weights
+
     def generate_samples(self):
         start = time.time()
         self.train_samples = [[] for _ in range(self.n_train)]
         for idx in range(self.n_train):
-            for sigIdx in range(self.n_sig):
-                b = sigIdx * self.p2
-                k = self.hashing(self.train_idxs[idx], self.train_weights[idx], b)
-                self.train_samples[idx].append(k)
+            for num_bin, r1, r2, c1, c2, b in zip(self.bins_list, self.ran_r1, self.ran_r2, self.ran_c1, self.ran_c2, self.ran_b):
+                k, yk = self.hashing(self.splited_train_idxs[idx], self.splited_train_weights[idx], num_bin, r1, r2, c1, c2, b)
+                self.train_samples[idx].append([k, yk])
         
         self.test_samples = [[] for _ in range(self.n_test)]
+        for num_bin, r1, r2, c1, c2, b in zip(self.bins_list, self.ran_r1, self.ran_r2, self.ran_c1, self.ran_c2, self.ran_b):
+                k, yk = self.hashing(self.splited_train_idxs[idx], self.splited_train_weights[idx], num_bin, r1, r2, c1, c2, b)
+            
         for idx in range(self.n_test):
-            for sigIdx in range(self.n_sig):
-                b = sigIdx * self.p2
-                k = self.hashing(self.train_idxs[idx], self.test_weights[idx], b)
-                self.test_samples[idx].append(k)
+            for num_bin, r1, r2, c1, c2, b in zip(self.bins_list, self.ran_r1, self.ran_r2, self.ran_c1, self.ran_c2, self.ran_b):
+                k, yk = self.hashing(self.splited_test_idxs[idx], self.splited_test_weights[idx], num_bin, r1, r2, c1, c2, b)
+                self.test_samples[idx].append([k, yk])
 
         self.total_time = '{:.5f}s'.format(time.time() - start)
 
-    def hashing(self, idxs, weights, b):
-        minIdx, minVal = 0, sys.maxsize
+    def hashing(self, splited_idxs, splited_weights, num_bin, r1, r2, c1, c2, b):
+        i, bin_idx = 0, num_bin
+        while True:
+            idxs = splited_idxs[bin_idx]
+            if len(idxs) == 0:
+                bin_idx = self.rerandomize_list[num_bin][i]
+                i += 1
+            else:
+                break
+        weights = splited_weights[bin_idx]
+
+        minIdx, minVal, minY = 0, sys.maxsize, 0
         for idx, weight in zip(idxs, weights):
+            idx %= self.numSigPerBins
             if weight == 0:
                 continue
-            pool_idx = (idx * self.p1 + b) % self.n_pool
-            a = self.pool[pool_idx] / weight
-
+            t = math.floor((math.log(weight) / -math.log(r1[idx] * r2[idx])) + b[idx])
+            y = math.exp(-math.log(r1[idx] * r2[idx]) * (t - b[idx]))
+            a = -math.log(c1[idx] * c2[idx]) * r1[idx] * r2[idx] / y
+            
             if minVal > a:
                 minVal = a
                 minIdx = idx
-        
-        return minIdx
+                minY = y
+
+        return minIdx, minY
     
     def get_similarity(self):
         self.similarity = []            # total similarity
@@ -566,7 +601,7 @@ class SCWS():
             for trs in self.train_samples:
                 cnt = 0
                 for t, tr in zip(ts, trs):
-                    if t == tr:
+                    if t[0] == tr[0] and t[1] == tr[1]:
                         cnt += 1
                 one_sim.append(cnt / self.n_sig)
 
