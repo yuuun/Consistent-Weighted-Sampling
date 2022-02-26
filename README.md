@@ -57,46 +57,46 @@ $ python3 main.py
  
  - The experiments will be depicted as follows,
  [Name of Method] | [Dataset]([Number of Samples])
- 
+
  #### Time
- |Method|Mnist(100)|
- |-----|------|
- |ICWS|175.419s|
- |0-bit CWS|169.261s|
- |CCWS|129.2s|
- |PCWS|154.364s|
- |I2CWS|162.348s|
- |BCWS|6.301s|
+ |Method|Mnist(100)|Mnist(500)|
+ |-----|------|--|
+ |ICWS|175.4s|869.6s|
+ |0-bit CWS|169.3s|842.1s|
+ |CCWS|129.2s|647.4s|
+ |PCWS|154.4s|767.0s|
+ |I2CWS|162.3s|805.7s|
+ |BCWS|6.3s|17.9s|
 
  #### Accuracy
- |Method|Mnist(100)|
- |-----|------|
- |ICWS|88.7%|
- |0-bit CWS|90.7%|
- |CCWS|79.3%|
- |PCWS|90.6%|
- |I2CWS|89.7%|
- |BCWS|84.3%|
+ |Method|Mnist(100)|Mnist(500)|
+ |-----|------|--|
+ |ICWS|88.7%|92.6%|
+ |0-bit CWS|90.7%|94.1%|
+ |CCWS|79.3%|81.8%|
+ |PCWS|90.6%|93.2%|
+ |I2CWS|89.7%|92.5%|
+ |BCWS|84.3%|84.4%|
 
  #### Precision@10
- |Method|Mnist(100)|
- |-----|------|
- |ICWS|59.9%|
- |0-bit CWS|61.6%|
- |CCWS|35.43%|
- |PCWS|60.9%|
- |I2CWS|59.2%|
- |BCWS|46.4%|
+ |Method|Mnist(100)|Mnist(500)|
+ |-----|------|--|
+ |ICWS|59.9%|80.4%|
+ |0-bit CWS|61.6%|80.5%|
+ |CCWS|35.43%|40.8%|
+ |PCWS|60.9%|79.5%|
+ |I2CWS|59.2%|78.8%|
+ |BCWS|46.4%|46.4%|
 
  #### Precision@100
-|Method|Mnist(100)|
- |-----|------|
- |ICWS|71.1%|
- |0-bit CWS|71.8%|
- |CCWS|48.7%|
- |PCWS|70.5%|
- |I2CWS|69.9%|
- |BCWS|57.5%|
+|Method|Mnist(100)|Mnist(500)|
+ |-----|------|---|
+ |ICWS|71.1%|86.8%|
+ |0-bit CWS|71.8%|86.3%|
+ |CCWS|48.7%|54.8%|
+ |PCWS|70.5%|85.8%|
+ |I2CWS|69.9%|84.8%|
+ |BCWS|57.5%|52.8%|
  
 
 
