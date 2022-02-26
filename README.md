@@ -48,7 +48,8 @@ $ python3 main.py
 
 ## Experiments
 #### The classification accuracy of Generalized Jaccard Similarity
-||Classification Accuracy|
+| |Classification Accuracy|
+|---|---|
 |Mnist|93.6%|
 ### Evaluation
  - Hashing Time
@@ -56,6 +57,7 @@ $ python3 main.py
  - Precision(the criteria of Jaccard Similarity)
  
  - The experiments will be depicted as follows,
+ 
  [Name of Method] | [Dataset]([Number of Samples])
 
  #### Time
