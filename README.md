@@ -1,5 +1,5 @@
 # Improved Consistent Weighted Sampling
-As datasets become larger and more high-dimensional, it becomes increasingly important to find data representations that allow compact storage and efficient distance computation and retrieval. Improved Consistent Weighted Sampling(ICWS, IEEE, 2010) is the state-of-the-art of the sampling methods in weighted sets. There are some variants of ICWS which decreases the time of sampling or increase the quality of samples. 
+As datasets become larger and more high-dimensional, it becomes increasingly important to find data representations that allow compact storage and efficient distance computation and retrieval. Improved Consistent Weighted Sampling(ICWS, ICDM, 2010) is the state-of-the-art of the sampling methods in weighted sets. There are some variants of ICWS which decreases the time of sampling or increase the quality of samples. 
 
 This repository implements ICWS and its variants.
 
