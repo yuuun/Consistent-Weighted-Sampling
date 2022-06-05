@@ -50,7 +50,7 @@ class GeneralizedJaccardSimliarity():
 
             sorted_similarity_idx = sorted(range(len(similarity)), key=lambda k: similarity[k], reverse=True)
             self.sorted_closest_idxs.append(sorted_similarity_idx)
-            self.total_time = '{:.5f}s'.format(time.time() - start)
+        self.total_time = '{:.5f}s'.format(time.time() - start)
 
     def get_acc(self):
         self.acc = calculate_acc(self.train_labels, self.test_labels, self.sorted_closest_idxs)
@@ -120,6 +120,7 @@ class ICWS():
         return minIdx, minY
     
     def get_similarity(self):
+        start = time.time()
         self.similarity = []            # total similarity
         self.sorted_closest_idxs = []   # total index sorted with 
         for ts in self.test_samples:
@@ -134,6 +135,7 @@ class ICWS():
             self.similarity.append(one_sim)
             sorted_similarity_idx = sorted(range(len(one_sim)), key=lambda k: one_sim[k], reverse=True)
             self.sorted_closest_idxs.append(sorted_similarity_idx)
+        self.compare_time = '{:.3f}s'.format(time.time() - start)
     
     def get_performance(self):
         self.acc = calculate_acc(self.train_labels, self.test_labels, self.sorted_closest_idxs)
@@ -555,10 +557,7 @@ class BCWS():
                 k, yk = self.hashing(self.splited_train_idxs[idx], self.splited_train_weights[idx], num_bin, r1, r2, c1, c2, b)
                 self.train_samples[idx].append([k, yk])
         
-        self.test_samples = [[] for _ in range(self.n_test)]
-        for num_bin, r1, r2, c1, c2, b in zip(self.bins_list, self.ran_r1, self.ran_r2, self.ran_c1, self.ran_c2, self.ran_b):
-                k, yk = self.hashing(self.splited_train_idxs[idx], self.splited_train_weights[idx], num_bin, r1, r2, c1, c2, b)
-            
+        self.test_samples = [[] for _ in range(self.n_test)]    
         for idx in range(self.n_test):
             for num_bin, r1, r2, c1, c2, b in zip(self.bins_list, self.ran_r1, self.ran_r2, self.ran_c1, self.ran_c2, self.ran_b):
                 k, yk = self.hashing(self.splited_test_idxs[idx], self.splited_test_weights[idx], num_bin, r1, r2, c1, c2, b)
@@ -608,6 +607,82 @@ class BCWS():
             self.similarity.append(one_sim)
             sorted_similarity_idx = sorted(range(len(one_sim)), key=lambda k: one_sim[k], reverse=True)
             self.sorted_closest_idxs.append(sorted_similarity_idx)
+    
+    def get_performance(self):
+        self.acc = calculate_acc(self.train_labels, self.test_labels, self.sorted_closest_idxs)
+        self.prec_list = calculate_prec(self.jacc, self.sorted_closest_idxs, self.kList)
+
+class PCA():
+    def __init__(self, train_weights, train_idxs, train_labels, test_weights, test_idxs, test_labels, jacc, dim, n_sig, kList):
+        self.train_weights = train_weights
+        self.train_idxs = train_idxs
+        self.train_labels = train_labels
+
+        self.test_weights = test_weights
+        self.test_idxs = test_idxs
+        self.test_labels = test_labels
+        
+        self.n_train = len(self.train_idxs)
+        self.n_test = len(self.test_idxs)
+
+        self.jacc = jacc
+        
+        self.dim = dim
+        self.n_sig = n_sig  # number of samples(signature) to hash
+        self.kList = kList
+
+        self.extend_dimension()
+        self.train()
+        self.get_similarity()
+        self.get_performance()
+    
+    def extend_dimension(self):
+        self.train_weights_origin = []
+        self.test_weights_origin = []
+
+        for idxs, weights in zip(self.train_idxs, self.train_weights):
+            tmp = [0] * self.dim
+            for idx, w in zip(idxs, weights):
+                tmp[idx] = w
+            self.train_weights_origin.append(tmp)
+        
+        for idxs, weights in zip(self.test_idxs, self.test_weights):
+            tmp = [0] * self.dim
+            for idx, w in zip(idxs, weights):
+                tmp[idx] = w
+            self.test_weights_origin.append(tmp)
+
+    def train(self):
+        from sklearn.decomposition import PCA
+        start = time.time()
+        pcal = PCA(n_components=self.n_sig)
+        self.train_samples = pcal.fit_transform(self.train_weights_origin)
+        self.test_samples = pcal.fit_transform(self.test_weights_origin)
+        self.total_time = '{:.5f}s'.format(time.time() - start)
+    
+    
+    def get_similarity(self):
+        start = time.time()
+        self.similarity = []            # total similarity
+        self.sorted_closest_idxs = []   # total index sorted with 
+        for ts in self.test_samples:
+            one_sim = []                # simlarity between one test dataset and rest train dataset
+            for trs in self.train_samples:
+                up = 0
+                down = 0
+                for t, tr in zip(ts, trs):
+                    if t > tr:
+                        up += tr
+                        down += t
+                    else:
+                        up += t
+                        down += tr
+                one_sim.append(up / down)
+
+            self.similarity.append(one_sim)
+            sorted_similarity_idx = sorted(range(len(one_sim)), key=lambda k: one_sim[k], reverse=True)
+            self.sorted_closest_idxs.append(sorted_similarity_idx)
+        self.compare_time = '{:.3f}s'.format(time.time() - start)
     
     def get_performance(self):
         self.acc = calculate_acc(self.train_labels, self.test_labels, self.sorted_closest_idxs)
