@@ -660,7 +660,6 @@ class PCA():
         self.test_samples = pcal.fit_transform(self.test_weights_origin)
         self.total_time = '{:.5f}s'.format(time.time() - start)
     
-    
     def get_similarity(self):
         start = time.time()
         self.similarity = []            # total similarity
