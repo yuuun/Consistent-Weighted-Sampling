@@ -18,11 +18,7 @@ if __name__=='__main__':
     
     n_sig = 500
     kList = [1, 10, 50, 100, 500]
-    pca = PCA(data.train_weights, data.train_idxs, data.train_labels,
-                            data.test_weights, data.test_idxs, data.test_labels,
-                            js.sorted_closest_idxs, dim, n_sig, kList)
-    import pdb; pdb.set_trace()
-
+    
     icws = load_model(data, data_path + '.icws', ICWS, dim, n_sig, kList, js)
     zero_icws = load_model(data, data_path + '.zero_icws', zero_ICWS, dim, n_sig, kList, js)
     ccws = load_model(data, data_path + '.ccws', CCWS, dim, n_sig, kList, js)
