@@ -667,16 +667,10 @@ class PCA():
         for ts in self.test_samples:
             one_sim = []                # simlarity between one test dataset and rest train dataset
             for trs in self.train_samples:
-                up = 0
-                down = 0
+                sum_cnt = 0
                 for t, tr in zip(ts, trs):
-                    if t > tr:
-                        up += tr
-                        down += t
-                    else:
-                        up += t
-                        down += tr
-                one_sim.append(up / down)
+                    sum_cnt += (t - tr) ** 2
+                one_sim.append(sum_cnt ** 0.5)
 
             self.similarity.append(one_sim)
             sorted_similarity_idx = sorted(range(len(one_sim)), key=lambda k: one_sim[k], reverse=True)
